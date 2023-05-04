@@ -1,0 +1,28 @@
+- name: Ensure directories exists
+  ansible.builtin.file:
+    dest: "{{ item }}"
+    state: directory
+    mode: '0644'
+  loop:
+    - ~/compose
+    - ~/compose/prograf
+
+- name: Ensure docker-compose file has been updated
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: ~/compose/prograf/
+    mode: '0644'
+  loop:
+    - docker-compose.prometheus.yml
+    - docker-compose.grafana.yml
+    - prometheus.yml
+
+- name: Ensure prograf compose files are up
+  community.docker.docker_compose:
+    state: present
+    project_src: ~/compose/prograf/
+    files:
+      - docker-compose.prometheus.yml
+      - docker-compose.grafana.yml
+    # pull: false
+    # recreate: always

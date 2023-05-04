@@ -1,0 +1,9 @@
+- name: Play for prograf server
+  hosts: main
+  roles:
+    - essentials
+    - swap
+    - docker
+    - traefik
+    - prograf
+    - reboot
